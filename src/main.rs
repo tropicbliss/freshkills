@@ -26,18 +26,29 @@ fn main() {
                 {
                     writeln!(lock, "Deleting: {}", entry.path().display()).unwrap();
                     if entry.path().is_file() {
-                        if fs::remove_file(entry.path()).is_err() {
-                            writeln!(lock, "Failed to delete file {}", entry.path().display())
-                                .unwrap();
+                        if let Err(e) = fs::remove_file(entry.path()) {
+                            writeln!(
+                                lock,
+                                "Failed to delete file {}: {}",
+                                entry.path().display(),
+                                e
+                            )
+                            .unwrap();
                         }
                     } else if entry.path().is_dir() {
-                        if fs::remove_dir(entry.path()).is_err() {
-                            eprintln!("Failed to delete directory {}", entry.path().display());
+                        if let Err(e) = fs::remove_dir(entry.path()) {
+                            writeln!(
+                                lock,
+                                "Failed to delete directory {}: {}",
+                                entry.path().display(),
+                                e
+                            )
+                            .unwrap();
                         }
                     }
                 }
             }
-            Err(_) => writeln!(lock, "Error accessing entry").unwrap(),
+            Err(e) => writeln!(lock, "Error accessing entry: {}", e).unwrap(),
         }
     }
 }
