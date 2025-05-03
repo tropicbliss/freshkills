@@ -24,7 +24,7 @@ fn main() {
                 if !unignored_paths.contains(entry.path().as_os_str())
                     && !IGNORED_FILES.contains(&entry.file_name().to_string_lossy())
                 {
-                    println!("Deleting: {}", entry.path().display());
+                    writeln!(lock, "Deleting: {}", entry.path().display()).unwrap();
                     if entry.path().is_file() {
                         if fs::remove_file(entry.path()).is_err() {
                             writeln!(lock, "Failed to delete file {}", entry.path().display())
@@ -37,7 +37,7 @@ fn main() {
                     }
                 }
             }
-            Err(e) => writeln!(lock, "Error accessing entry: {}", e).unwrap(),
+            Err(_) => writeln!(lock, "Error accessing entry").unwrap(),
         }
     }
 }
