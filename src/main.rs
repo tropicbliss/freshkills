@@ -36,7 +36,7 @@ fn main() {
                             .unwrap();
                         }
                     } else if entry.path().is_dir() {
-                        if let Err(e) = fs::remove_dir(entry.path()) {
+                        if let Err(e) = fs::remove_dir_all(entry.path()) {
                             writeln!(
                                 lock,
                                 "Failed to delete directory {}: {}",
